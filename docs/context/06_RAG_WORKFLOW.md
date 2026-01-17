@@ -51,3 +51,29 @@ python scripts/build_rag_index.py
 - **Hook no muestra nada:**
   - Causa: O no hay archivos relevantes en stage, o la relevancia de la búsqueda no superó el umbral (0.65).
   - Verificación: Prueba con un archivo obvio (`git add examples/server/server.cpp`).
+
+### 3. El Asistente de PR (`scripts/prepare_pr_context.py`)
+
+Herramienta manual para generar la descripción de tus Pull Requests.
+
+**Uso:**
+
+```bash
+source .venv/bin/activate.fish
+python scripts/prepare_pr_context.py
+```
+
+**Salida:** Genera un bloque Markdown listo para copiar/pegar en GitHub, listando archivos modificados, documentación interna relacionada (links cruzados) y una checklist de cumplimiento dinámica.
+
+### 4. Integración VS Code (Search-on-Write)
+
+Se ha configurado `.vscode/tasks.json` para permitir consultas rápidas desde el editor.
+
+**Cómo usar:**
+
+1. Selecciona cualquier texto en tu código (ej: `ggml_mul_mat`).
+2. Presiona `Ctrl+Shift+P` (o `F1`).
+3. Escribe/Selecciona **"Tasks: Run Task"** -> **"🧠 RAG: Ask Context"**.
+4. La respuesta semántica aparecerá en la terminal integrada.
+
+También existe la tarea **"🧠 RAG: Re-index Docs"** para regenerar el índice tras editar documentación.
