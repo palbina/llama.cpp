@@ -1,6 +1,6 @@
 # 04 - Herramientas y Scripts Python
 
-El ecosistema `llama.cpp` incluye scripts vitales para preparar modelos.
+El ecosistema `llama.cpp` incluye scripts vitales para preparar modelos, y este proyecto añade herramientas específicas para RAG.
 
 ## Scripts de Conversión (`convert_hf_to_gguf.py`)
 
@@ -37,9 +37,14 @@ Convierte un modelo GGUF de alta precisión (F16/F32) a versiones cuantizadas.
 
 - **Flujo Típico:** HF -> `convert_hf_to_gguf` (f16) -> `llama-quantize` (q4) -> Inferencia.
 
-## Scripts del Proyecto Actual
+## Scripts del Proyecto (RAG Local)
 
-Scripts personalizados creados para el despliegue local (ver `05_LOCAL_DEPLOYMENT.md`):
+Scripts personalizados ubicados en `scripts/` para gestionar la base de conocimiento semántica.
 
-- `download_model.sh`: Automatización de descarga con `curl`.
-- `find_model.py`: Búsqueda en HuggingFace Hub usando API Python.
+| Script | Descripción | Uso Típico |
+| :--- | :--- | :--- |
+| `build_rag_index.py` | **Indexador.** Lee documentos (`docs/`), genera embeddings vía servidor local (puerto 8080) y guarda el índice vectorial en disco. Usa `chunk_size=100` para compatibilidad estricta. | `python scripts/build_rag_index.py` |
+| `ask_local_context.py` | **Buscador CLI.** Realiza consultas semánticas al índice guardado y devuelve los fragmentos más relevantes con su puntaje de similitud. | `python scripts/ask_local_context.py "pregunta"` |
+| `rag_git_check.py` | **Git Hook.** Analiza archivos en *stage* y busca documentación relevante automáticamente antes de cada commit. | Ejecución automática por Git (pre-commit). |
+
+> **Nota:** Estos scripts requieren el entorno virtual activo (`source .venv/bin/activate.fish`) y el servidor de embeddings (`./start_embedding_server.sh`) corriendo.
