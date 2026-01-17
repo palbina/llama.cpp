@@ -38,12 +38,18 @@ Script maestro para levantar el servicio.
   -ngl 99 \     # TODO a la GPU (modelo pequeño cabe en VRAM compartida)
   --embedding \ # Modo embedding
   --port 8080 \ # Puerto estándar
-  -b 512        # Batch size conservador
+  -b 2048 \     # Batch size aumentado para chunks grandes
+  -ub 2048      # Physical batch size igualado
 ```
 
 ### B. `download_model.sh`
 
 Script de recuperación ante desastres o configuración inicial. Descarga el modelo específico desde HuggingFace.
+
+### C. Scripts RAG Clientes
+
+- `build_rag_index.py`: Indexador. **Nota:** `chunk_size` ajustado a **128** tokens debido a limitaciones de metadatos en el modelo GGUF actual (reporta 512 max context).
+- `ask_local_context.py`: Buscador semántico CLI.
 
 ## Integración RAG
 
@@ -53,3 +59,4 @@ Cualquier cliente RAG (LangChain, LlamaIndex, scripts custom) debe configurarse 
 - **Base URL:** `http://localhost:8080/v1`
 - **API Key:** (Cualquiera string, ej. "sk-local")
 - **Modelo:** `snowflake-arctic-embed-m` (o alias configurado).
+- **Embed Batch Size:** Recomendado <= 10 para evitar saturar el queue local.
