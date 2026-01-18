@@ -7,4 +7,5 @@
   -ngl 99 \
   --embedding \
   --port 8080 \
-  -b 512
+  -b 2048 \
+  -ub 2048
