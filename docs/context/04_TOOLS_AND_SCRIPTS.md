@@ -43,7 +43,7 @@ Scripts personalizados ubicados en `scripts/` para gestionar la base de conocimi
 
 | Script | Descripción | Uso Típico |
 | :--- | :--- | :--- |
-| `build_rag_index.py` | **Indexador.** Lee documentos (`docs/`), genera embeddings vía servidor local (puerto 8080) y guarda el índice vectorial en disco. Usa `chunk_size=100` para compatibilidad estricta. | `python scripts/build_rag_index.py` |
+| `build_rag_index.py` | **Indexador Robusto.** Divide docs en nodos pequeños (150 tokens) e inserta por lotes con recuperación de errores. Excluye metadatos para optimizar contexto. | `python scripts/build_rag_index.py` |
 | `ask_local_context.py` | **Buscador CLI.** Realiza consultas semánticas al índice guardado y devuelve los fragmentos más relevantes con su puntaje de similitud. | `python scripts/ask_local_context.py "pregunta"` |
 | `rag_git_check.py` | **Git Hook.** Analiza archivos en *stage* y busca documentación relevante automáticamente antes de cada commit. | Ejecución automática por Git (pre-commit). |
 

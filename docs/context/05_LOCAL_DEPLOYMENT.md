@@ -48,7 +48,9 @@ Script de recuperación ante desastres o configuración inicial. Descarga el mod
 
 ### C. Scripts RAG Clientes
 
-- `build_rag_index.py`: Indexador. **Nota:** `chunk_size` ajustado a **128** tokens debido a limitaciones de metadatos en el modelo GGUF actual (reporta 512 max context).
+- `build_rag_index.py`: Indexador.
+  - **Estrategia:** `chunk_size=200` y `TokenTextSplitter`.
+  - **Optimización:** Se excluye toda metadata (`file_path`, etc.) del vector para ahorrar tokens, ya que el modelo GGUF a veces rechaza inputs >512 tokens a pesar de soportar 8192.
 - `ask_local_context.py`: Buscador semántico CLI.
 
 ## Integración RAG
