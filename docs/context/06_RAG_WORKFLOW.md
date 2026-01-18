@@ -5,7 +5,7 @@ Este proyecto implementa un sistema de **"Documentación Proactiva"** integrado 
 ## Arquitectura
 
 1. **Base de Conocimiento:** Archivos Markdown en `docs/` indexados vectorialmente en `storage_context/`.
-2. **Motor de Búsqueda:** `start_embedding_server.sh` (llama.cpp) actuando como proveedor de embeddings (modelo `snowflake-arctic-embed-m`).
+2. **Motor de Búsqueda:** `start_embedding_server.sh` (llama.cpp) actuando como proveedor de embeddings (modelo `snowflake-arctic-embed-m-v2.0`).
 3. **Cliente:** Scripts Python (`llama-index`) que consultan el motor.
 4. **Disparador:** Hook `pre-commit` de Git.
 
@@ -45,8 +45,9 @@ python scripts/build_rag_index.py
 ## Solución de Problemas Comunes
 
 - **Error 500/400 en Indexación:**
-  - Causa: El texto excede la ventana de contexto del modelo (512 tokens).
-  - Solución: `build_rag_index.py` ya está configurado con `chunk_size=100` para mitigar esto agresivamente.
+  - Causa: El texto excede la ventana de contexto del modelo.
+  - Solución: Ajustado `chunk_size=2048` en cliente. El servidor usa `-c 8192` y `-b 512`.
+  - **Modelo:** Snowflake Arctic v2.0 (NO requiere prefijos).
 
 - **Hook no muestra nada:**
   - Causa: O no hay archivos relevantes en stage, o la relevancia de la búsqueda no superó el umbral (0.65).

@@ -1,7 +1,7 @@
 # Estado del Proyecto: Optimización de Embeddings y RAG Local
 
 > **Última Actualización:** 2026-01-17
-> **Objetivo Actual:** Consolidar pipeline RAG para asistencia al desarrollo. - **COMPLETADO**
+> **Objetivo Actual:** Consolidar pipeline RAG para asistencia al desarrollo con Nomic v1.5 y aceleración GPU (Iris Xe). - **COMPLETADO**
 
 ## 1. Resumen Ejecutivo
 
@@ -11,9 +11,12 @@ El proyecto ha evolucionado de un simple fork de `llama.cpp` a un entorno de des
 
 ### ✅ A. Migración de Modelo (DONE)
 
-- **Anterior:** `nomic-embed-text-v1.5` (Lento en español).
-- **Actual:** `snowflake-arctic-embed-m-v2.0-Q4_K_M`.
-- **Resultado:** Mejor comprensión semántica multilingüe.
+- **Anterior:** `nomic-embed-text-v1.5` (Lento, requiere prefijos, subóptimo en español).
+- **Actual:** `snowflake-arctic-embed-m-v2.0-Q4_K_M` (~74 MB).
+- **Resultado:**
+  - ~1.5-2x más rápido (arquitectura XLM-RoBERTa vs BERT+RoPE).
+  - Superior en español (benchmark MIRACL).
+  - Sin prefijos requeridos (simplifica indexación).
 
 ### ✅ B. Optimización del Servidor (DONE)
 
@@ -21,8 +24,9 @@ El proyecto ha evolucionado de un simple fork de `llama.cpp` a un entorno de des
 - **Backend:** Vulkan (`-DGGML_VULKAN=1`).
 - **Tuning:**
   - Contexto: 8192 tokens.
-  - Batch Size: **2048** (Crítico para estabilidad).
+  - Batch Size: **4096** / Ubatch: **2048** (Optimizado para Nomic).
   - Offload: 99 capas (Full GPU).
+  - Rendimiento: Indexación masiva estable sin errores 500.
 
 ### ✅ C. Herramientas RAG (DONE)
 
@@ -53,11 +57,12 @@ graph TD
 
 ## 4. Próximos Pasos (Backlog)
 
-- [ ] **Orquestación de Arranque:** Unificar el arranque del servidor y el entorno en un solo comando (ej: `make dev-env`).
-- [ ] **Actualización Automática:** GitHub Action para re-indexar la documentación en CI (si se despliega servidor remoto).
-- [ ] **Integración LLM Generativo:** Añadir un segundo modelo (ej: `Llama-3-8B-Q4`) para sintetizar respuestas en lugar de solo mostrar fragmentos (actualmente usamos `MockLLM` para solo retrieval).
+- [x] **Orquestación de Arranque:** Unificar el arranque del servidor y el entorno en un solo comando (`make dev-env`).
+- [x] **Actualización Automática:** GitHub Action `.github/workflows/reindex_rag.yml` para re-indexar documentación en CI.
+- [x] **Integración LLM Generativo:** Añadido soporte para `make chat-server` y `scripts/ask_local_context.py --chat` usando Llama-3.2-3B.
 
 ## 5. Referencias Rápidas
 
+- **Comandos Make:** Ejecuta `make help` para ver todas las opciones disponibles.
 - **Ver Flujo RAG:** [docs/context/06_RAG_WORKFLOW.md](./06_RAG_WORKFLOW.md)
 - **Ver Despliegue:** [docs/context/05_LOCAL_DEPLOYMENT.md](./05_LOCAL_DEPLOYMENT.md)
