@@ -11,7 +11,8 @@ Servidor HTTP ligero integrado en `llama.cpp`. Implementa una API propia y un su
 - **`-c <n>`**: Tamaño de la ventana de contexto (ej. 8192).
 - **`--embedding`**: Habilita (o fuerza) capacidades de generación de embeddings.
 - **`-ngl <n>`**: Capas a GPU (GPU offloading).
-- **`-b <n>`**: Batch size. Importante para embeddings masivos.
+- **`-b <n>`**: Logical Batch size. Crítico para RAG: debe ser igual o mayor al tamaño del chunk más grande para evitar Buffer Overflows.
+- **`-ub <n>`**: Physical Batch size. Para procesamiento óptimo en batches grandes, igualar a `-b`.
 
 ### Endpoints Relevantes para el Proyecto
 
